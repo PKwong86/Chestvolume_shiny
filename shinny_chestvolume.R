@@ -168,7 +168,27 @@ server <- function(input, output, session) {
     n_rows <- nrow(data$df)
     sliderInput("rangeVC", "Select Range for 'VC':", min = 1, max = n_rows, value = c(round(3 * n_rows / 4) + 1, round(3 * n_rows / 4) + 50), step = 1)
   })
+  output$segmentInputs <- renderUI({
+    numSegments <- input$numSegments
+    lapply(seq_len(numSegments), function(i) {
+      textInput(
+        inputId = paste0("segment_", i),
+        label = paste("Markers for Segment", i),
+        placeholder = "e.g. 1,2,4,5"
+      )
+    })
+  })
   
+  output$segmentNames <- renderUI({
+    numSegments <- input$numSegments
+    lapply(seq_len(numSegments), function(i) {
+      textInput(
+        inputId = paste0("segment_name_", i),
+        label = paste("Name for Segment", i),
+        placeholder = "e.g. UL, UR..."
+      )
+    })
+  })
   # Reactive expression triggered by the "Calculate" button for tables
   calculate_data <- eventReactive(input$calcButton, {
     data()
